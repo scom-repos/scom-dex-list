@@ -15727,6 +15727,58 @@ define("@scom/scom-dex-list", ["require", "exports", "@ijstech/components", "@sc
     function getDexList() {
         return [
             {
+                chainId: 56,
+                dexCode: 'OpenSwap',
+                dexName: 'OpenSwap',
+                dexType: IDexType.Normal,
+                routerAddress: '0x50f5679F0CeF71287bD9C7e619960fF9C579661C',
+                factoryAddress: '0x0625468f8F56995Ff1C27EB6FD44ac90E96C5D22',
+                tradeFee: {
+                    fee: '200',
+                    base: '100000'
+                },
+                image: fullPath('/img/openswap.png')
+            },
+            {
+                chainId: 56,
+                dexCode: 'IFSwapV1',
+                dexName: 'IFSwapV1',
+                dexType: IDexType.Normal,
+                routerAddress: '0x8f2A0d8865D995364DC6843D51Cf6989001f989e',
+                factoryAddress: '0x918d7e714243F7d9d463C37e106235dCde294ffC',
+                tradeFee: {
+                    fee: '6',
+                    base: '10000'
+                },
+                image: fullPath('/img/IFSwapV1.png')
+            },
+            {
+                chainId: 56,
+                dexCode: 'IFSwapV3',
+                dexName: 'IFSwapV3',
+                dexType: IDexType.Normal,
+                routerAddress: '0x56f6ca0a3364fa3ac9f0e8e9858b2966cdf39d03',
+                factoryAddress: '0x4233ad9b8b7c1ccf0818907908a7f0796a3df85f',
+                tradeFee: {
+                    fee: '30',
+                    base: '10000'
+                },
+                image: fullPath('/img/IFSwapV1.png')
+            },
+            {
+                chainId: 56,
+                dexCode: 'BakerySwap',
+                dexName: 'BakerySwap',
+                dexType: IDexType.BakerySwap,
+                routerAddress: '0xCDe540d7eAFE93aC5fE6233Bee57E1270D3E330F',
+                factoryAddress: '0x01bF7C66c6BD861915CdaaE475042d3c4BaE16A7',
+                tradeFee: {
+                    fee: '3',
+                    base: '1000'
+                },
+                image: fullPath('/img/bakeryswap.svg')
+            },
+            {
                 chainId: 97,
                 dexCode: 'OpenSwap',
                 dexName: 'OpenSwap',
@@ -15738,6 +15790,19 @@ define("@scom/scom-dex-list", ["require", "exports", "@ijstech/components", "@sc
                     base: '100000'
                 },
                 image: fullPath('/img/openswap.png')
+            },
+            {
+                chainId: 97,
+                dexCode: 'BakerySwap',
+                dexName: 'BakerySwap',
+                dexType: IDexType.BakerySwap,
+                routerAddress: '0xCDe540d7eAFE93aC5fE6233Bee57E1270D3E330F',
+                factoryAddress: '0x01bF7C66c6BD861915CdaaE475042d3c4BaE16A7',
+                tradeFee: {
+                    fee: '3',
+                    base: '1000'
+                },
+                image: fullPath('/img/bakeryswap.png')
             },
             {
                 chainId: 43113,
