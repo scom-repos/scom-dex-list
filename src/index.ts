@@ -243,6 +243,19 @@ export default function getDexList(): IDexInfo[] {
         },
         {
             chainId: 56,
+            dexCode: 'PancakeSwap',
+            dexName: 'PancakeSwap',
+            dexType: IDexType.Normal,
+            routerAddress: '0x10ED43C718714eb63d5aA57B78B54704E256024E',
+            factoryAddress: '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73',
+            tradeFee: {
+                fee: '25',
+                base: '10000'
+            },
+            image: fullPath('/img/pancakeswap.svg')
+        },     
+        {
+            chainId: 56,
             dexCode: 'IFSwapV1',
             dexName: 'IFSwapV1',
             dexType: IDexType.Normal,
