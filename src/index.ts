@@ -1,48 +1,12 @@
 import { BigNumber, TransactionOptions, TransactionReceipt } from '@ijstech/eth-contract';
 import { application } from '@ijstech/components';
-import { Contracts as OswapContracts } from './contracts/oswap-openswap-contract/index';
-import { Contracts as BakeryContracts } from './contracts/oswap-bakery-swap-contract/index';
-import { Contracts as TraderJoeContracts } from './contracts/oswap-trader-joe-contract/index';
-
-import { Wallet } from '@ijstech/eth-wallet';
+import { getRouterSwap } from './routerSwap';
+import { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput } from './interfaces';
+import { getDexPair } from './dexPair';
+import { IRpcWallet } from '@ijstech/eth-wallet';
 let moduleDir = application.currentModuleDir;
 
-export interface ITradeFeeInfo {
-    fee: string;
-    base: string;
-}
-
-export enum IDexType {
-    Normal = 'Normal',
-    BakerySwap = 'BakerySwap',
-    TraderJoe = 'TraderJoe',
-    IFSwapV3 = 'IFSwapV3'
-}
-
-export interface IDexInfo {
-    chainId: number;
-    dexCode: string;
-    dexName: string;
-    dexType: IDexType;
-    routerAddress: string;
-    factoryAddress: string;
-    tradeFee: ITradeFeeInfo;
-    image: string;
-}
-
-export interface IExecuteSwapOptions {
-    feeOnTransfer: boolean;
-    exactType: 'exactIn' | 'exactOut';
-    tokenInType: 'ETH' | 'ERC20';
-    tokenOutType: 'ETH' | 'ERC20';
-    params: any;
-    txOptions?: TransactionOptions
-}
-
-export interface IRouterSwapOutput {
-    (params: any, options?: TransactionOptions): Promise<TransactionReceipt>;
-    txData: (params: any, options?: TransactionOptions) => Promise<string>;
-}
+export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput };
 
 function fullPath(path: string): string {
     if (path.indexOf('://') > 0)
@@ -50,80 +14,31 @@ function fullPath(path: string): string {
     return `${moduleDir}/${path}`
 }
 
-export abstract class RouterSwap {
-    protected router: any;
-    constructor(router: any) {
-        this.router = router;
+export async function getDexPairReserves(
+    wallet: IRpcWallet, 
+    chainId: number, 
+    dexCode: string, 
+    pairAddress: string, 
+    tokenInAddress: string, 
+    tokenOutAddress: string
+) {
+    const dexInfo = getDexList().find(d => d.chainId === chainId && d.dexCode === dexCode);
+    if (!dexInfo) return Promise.reject(new Error('Dex not found'));
+    let pair = getDexPair(wallet, dexInfo, pairAddress);
+    let reserves = await pair.getReserves();
+    let reserveObj: IGetDexPairReservesOutput;
+    if (new BigNumber(tokenInAddress.toLowerCase()).lt(tokenOutAddress.toLowerCase())) {
+      reserveObj = {
+        reserveA: reserves._reserve0,
+        reserveB: reserves._reserve1
+      };
+    } else {
+      reserveObj = {
+        reserveA: reserves._reserve1,
+        reserveB: reserves._reserve0
+      };
     }
-    abstract swapExactETHForTokensSupportingFeeOnTransferTokens: IRouterSwapOutput;
-    abstract swapExactETHForTokens: IRouterSwapOutput;
-    abstract swapExactTokensForETHSupportingFeeOnTransferTokens: IRouterSwapOutput;
-    abstract swapExactTokensForETH: IRouterSwapOutput;
-    abstract swapExactTokensForTokensSupportingFeeOnTransferTokens: IRouterSwapOutput;
-    abstract swapExactTokensForTokens: IRouterSwapOutput;
-    abstract swapETHForExactTokens: IRouterSwapOutput;
-    abstract swapTokensForExactETH: IRouterSwapOutput;
-    abstract swapTokensForExactTokens: IRouterSwapOutput;
-}
-
-export class NormalRouterSwap extends RouterSwap {
-    protected router: any;
-    constructor(router: any) {
-        super(router);
-    }
-    swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactETHForTokensSupportingFeeOnTransferTokens;
-    swapExactETHForTokens = this.router.swapExactETHForTokens;
-    swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForETHSupportingFeeOnTransferTokens;
-    swapExactTokensForETH = this.router.swapExactTokensForETH;
-    swapExactTokensForTokensSupportingFeeOnTransferTokens = this.router.swapExactTokensForTokensSupportingFeeOnTransferTokens;
-    swapExactTokensForTokens = this.router.swapExactTokensForTokens;
-    swapETHForExactTokens = this.router.swapETHForExactTokens;
-    swapTokensForExactETH = this.router.swapTokensForExactETH;
-    swapTokensForExactTokens = this.router.swapTokensForExactTokens;
-}
-
-export class BakerySwapRouterSwap extends NormalRouterSwap {
-    protected router: BakeryContracts.BakerySwapRouter;
-    constructor(router: BakeryContracts.BakerySwapRouter) {
-        super(router);
-    }
-    swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactBNBForTokensSupportingFeeOnTransferTokens;
-    swapExactETHForTokens = this.router.swapExactBNBForTokens;
-    swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForBNBSupportingFeeOnTransferTokens;
-    swapExactTokensForETH = this.router.swapExactTokensForBNB;
-    swapETHForExactTokens = this.router.swapBNBForExactTokens;
-    swapTokensForExactETH = this.router.swapTokensForExactBNB;
-}
-
-export class TraderJoeRouterSwap extends NormalRouterSwap {
-    protected router: TraderJoeContracts.JoeRouter02;
-    constructor(router: TraderJoeContracts.JoeRouter02) {
-        super(router);
-    }
-    swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactAVAXForTokensSupportingFeeOnTransferTokens;
-    swapExactETHForTokens = this.router.swapExactAVAXForTokens;
-    swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForAVAXSupportingFeeOnTransferTokens;
-    swapExactTokensForETH = this.router.swapExactTokensForAVAX;
-    swapETHForExactTokens = this.router.swapAVAXForExactTokens;
-    swapTokensForExactETH = this.router.swapTokensForExactAVAX;
-}
-
-function getRouterSwap(dexInfo: IDexInfo): RouterSwap {
-    const wallet = Wallet.getClientInstance();
-    let routerSwap: RouterSwap;
-    if (dexInfo.dexType === IDexType.Normal) {
-        const router = new OswapContracts.OSWAP_Router(wallet, dexInfo.routerAddress);
-        routerSwap = new NormalRouterSwap(router);
-    }
-    else if (dexInfo.dexType === IDexType.BakerySwap) {
-        const router = new BakeryContracts.BakerySwapRouter(wallet, dexInfo.routerAddress);
-        routerSwap = new BakerySwapRouterSwap(router);
-    }
-    else if (dexInfo.dexType === IDexType.TraderJoe) {
-        const router = new TraderJoeContracts.JoeRouter02(wallet, dexInfo.routerAddress);
-        routerSwap = new TraderJoeRouterSwap(router);
-    }
-    return routerSwap;
+    return reserveObj;
 }
 
 export async function getRouterSwapTxData(chainId: number, dexCode: string, options: IExecuteSwapOptions): Promise<string> {
@@ -271,7 +186,7 @@ export default function getDexList(): IDexInfo[] {
             chainId: 56,
             dexCode: 'IFSwapV3',
             dexName: 'IFSwapV3',
-            dexType: IDexType.Normal,
+            dexType: IDexType.IFSwapV3,
             routerAddress: '0x56f6ca0a3364fa3ac9f0e8e9858b2966cdf39d03',
             factoryAddress: '0x4233ad9b8b7c1ccf0818907908a7f0796a3df85f',
             tradeFee: {
