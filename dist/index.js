@@ -17956,6 +17956,19 @@ define("@scom/scom-dex-list", ["require", "exports", "@ijstech/eth-contract", "@
     function getDexList() {
         return [
             {
+                chainId: 1,
+                dexCode: 'UniswapV2',
+                dexName: 'UniswapV2',
+                dexType: interfaces_3.IDexType.Normal,
+                routerAddress: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+                factoryAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+                tradeFee: {
+                    fee: '3',
+                    base: '1000'
+                },
+                image: fullPath('/img/uniswap-logo.svg')
+            },
+            {
                 chainId: 56,
                 dexCode: 'OpenSwap',
                 dexName: 'OpenSwap',
@@ -17970,8 +17983,8 @@ define("@scom/scom-dex-list", ["require", "exports", "@ijstech/eth-contract", "@
             },
             {
                 chainId: 56,
-                dexCode: 'PancakeSwap',
-                dexName: 'PancakeSwap',
+                dexCode: 'PancakeSwapV2',
+                dexName: 'PancakeSwapV2',
                 dexType: interfaces_3.IDexType.Normal,
                 routerAddress: '0x10ED43C718714eb63d5aA57B78B54704E256024E',
                 factoryAddress: '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73',
