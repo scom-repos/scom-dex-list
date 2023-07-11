@@ -157,6 +157,19 @@ export default function getDexList(): IDexInfo[] {
             image: fullPath('/img/uniswap-logo.svg')
         },        
         {
+            chainId: 1,
+            dexCode: 'SushiSwapV2',
+            dexName: 'SushiSwapV2',
+            dexType: IDexType.Normal,
+            routerAddress: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+            factoryAddress: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
+            tradeFee: {
+                fee: '3',
+                base: '1000'
+            },
+            image: fullPath('/img/sushiswap-logo.svg')
+        }, 
+        {
             chainId: 56,
             dexCode: 'OpenSwap',
             dexName: 'OpenSwap',
@@ -222,6 +235,19 @@ export default function getDexList(): IDexInfo[] {
             image: fullPath('/img/bakeryswap.svg')
         },               
         {
+            chainId: 56,
+            dexCode: 'Biswap',
+            dexName: 'Biswap',
+            dexType: IDexType.Normal,
+            routerAddress: '0x3a6d8cA21D1CF76F653A67577FA0D27453350dD8',
+            factoryAddress: '0x858E3312ed3A876947EA49d572A7C42DE08af7EE',
+            tradeFee: {
+                fee: '1',
+                base: '1000'
+            },
+            image: fullPath('/img/biswap.svg')            
+        },
+        {
             chainId: 97,
             dexCode: 'OpenSwap',
             dexName: 'OpenSwap',
@@ -259,6 +285,32 @@ export default function getDexList(): IDexInfo[] {
                 base: '100000'
             },
             image: fullPath('/img/openswap.png')
+        },        
+        {
+            chainId: 43114,
+            dexCode: 'TraderJoe',
+            dexName: 'TraderJoe',
+            dexType: IDexType.TraderJoe,
+            routerAddress: '0x60aE616a2155Ee3d9A68541Ba4544862310933d4',
+            factoryAddress: '0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10',
+            tradeFee: {
+                fee: '3',
+                base: '1000'
+            },
+            image: fullPath('/img/traderjoe.svg')
+        },        
+        {
+            chainId: 43114,
+            dexCode: 'Pangolin',
+            dexName: 'Pangolin',
+            dexType: IDexType.TraderJoe,
+            routerAddress: '0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106',
+            factoryAddress: '0xefa94DE7a4656D787667C749f7E1223D71E9FD88',
+            tradeFee: {
+                fee: '3',
+                base: '1000'
+            },
+            image: fullPath('/img/pangolin.svg')
         }
     ]
 }
