@@ -15560,7 +15560,7 @@ define("@scom/scom-dex-list/interfaces.ts", ["require", "exports"], function (re
 define("@scom/scom-dex-list/routerSwap.ts", ["require", "exports", "@scom/scom-dex-list/contracts/oswap-openswap-contract/index.ts", "@scom/scom-dex-list/contracts/oswap-bakery-swap-contract/index.ts", "@scom/scom-dex-list/contracts/oswap-trader-joe-contract/index.ts", "@ijstech/eth-wallet", "@scom/scom-dex-list/interfaces.ts"], function (require, exports, index_3, index_4, index_5, eth_wallet_1, interfaces_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getRouterSwap = exports.TraderJoeRouterSwap = exports.BakerySwapRouterSwap = exports.NormalRouterSwap = exports.RouterSwap = void 0;
+    exports.getSwapProxySelectors = exports.getRouterSwap = exports.TraderJoeRouterSwap = exports.BakerySwapRouterSwap = exports.NormalRouterSwap = exports.RouterSwap = void 0;
     class RouterSwap {
         constructor(router) {
             this.router = router;
@@ -15570,6 +15570,14 @@ define("@scom/scom-dex-list/routerSwap.ts", ["require", "exports", "@scom/scom-d
     class NormalRouterSwap extends RouterSwap {
         constructor(router) {
             super(router);
+            this.PermittedProxyFunctions = [
+                "swapExactTokensForTokens",
+                "swapTokensForExactTokens",
+                "swapExactETHForTokens",
+                "swapTokensForExactETH",
+                "swapExactTokensForETH",
+                "swapETHForExactTokens"
+            ];
             this.swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactETHForTokensSupportingFeeOnTransferTokens;
             this.swapExactETHForTokens = this.router.swapExactETHForTokens;
             this.swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForETHSupportingFeeOnTransferTokens;
@@ -15585,6 +15593,14 @@ define("@scom/scom-dex-list/routerSwap.ts", ["require", "exports", "@scom/scom-d
     class BakerySwapRouterSwap extends NormalRouterSwap {
         constructor(router) {
             super(router);
+            this.PermittedProxyFunctions = [
+                "swapExactTokensForTokens",
+                "swapTokensForExactTokens",
+                "swapExactBNBForTokens",
+                "swapTokensForExactBNB",
+                "swapExactTokensForBNB",
+                "swapBNBForExactTokens"
+            ];
             this.swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactBNBForTokensSupportingFeeOnTransferTokens;
             this.swapExactETHForTokens = this.router.swapExactBNBForTokens;
             this.swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForBNBSupportingFeeOnTransferTokens;
@@ -15597,6 +15613,14 @@ define("@scom/scom-dex-list/routerSwap.ts", ["require", "exports", "@scom/scom-d
     class TraderJoeRouterSwap extends NormalRouterSwap {
         constructor(router) {
             super(router);
+            this.PermittedProxyFunctions = [
+                "swapExactTokensForTokens",
+                "swapTokensForExactTokens",
+                "swapExactAVAXForTokens",
+                "swapTokensForExactAVAX",
+                "swapExactTokensForAVAX",
+                "swapAVAXForExactTokens"
+            ];
             this.swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactAVAXForTokensSupportingFeeOnTransferTokens;
             this.swapExactETHForTokens = this.router.swapExactAVAXForTokens;
             this.swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForAVAXSupportingFeeOnTransferTokens;
@@ -15624,6 +15648,29 @@ define("@scom/scom-dex-list/routerSwap.ts", ["require", "exports", "@scom/scom-d
         return routerSwap;
     }
     exports.getRouterSwap = getRouterSwap;
+    function getSwapProxySelectors(dexInfo) {
+        const wallet = eth_wallet_1.Wallet.getClientInstance();
+        let routerSwap;
+        let router;
+        if (dexInfo.dexType === interfaces_1.IDexType.BakerySwap) {
+            router = new index_4.Contracts.BakerySwapRouter(wallet, dexInfo.routerAddress);
+            routerSwap = new BakerySwapRouterSwap(router);
+        }
+        else if (dexInfo.dexType === interfaces_1.IDexType.TraderJoe) {
+            const router = new index_5.Contracts.JoeRouter02(wallet, dexInfo.routerAddress);
+            routerSwap = new TraderJoeRouterSwap(router);
+        }
+        else {
+            const router = new index_3.Contracts.OSWAP_Router(wallet, dexInfo.routerAddress);
+            routerSwap = new NormalRouterSwap(router);
+        }
+        let selectors = routerSwap.PermittedProxyFunctions
+            .map(e => e + "(" + router._abi.filter(f => f.name == e)[0].inputs.map(f => f.type).join(',') + ")")
+            .map(e => wallet.soliditySha3(e).substring(0, 10))
+            .map(e => router.address.toLowerCase() + e.replace("0x", ""));
+        return selectors;
+    }
+    exports.getSwapProxySelectors = getSwapProxySelectors;
 });
 define("@scom/scom-dex-list/contracts/oswap-impossible-swap-contract/contracts/ImpossibleERC20.json.ts", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -17823,7 +17870,8 @@ define("@scom/scom-dex-list/dexPair.ts", ["require", "exports", "@scom/scom-dex-
 define("@scom/scom-dex-list", ["require", "exports", "@ijstech/eth-contract", "@ijstech/components", "@scom/scom-dex-list/routerSwap.ts", "@scom/scom-dex-list/interfaces.ts", "@scom/scom-dex-list/dexPair.ts"], function (require, exports, eth_contract_68, components_1, routerSwap_1, interfaces_3, dexPair_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.executeRouterSwap = exports.getRouterSwapTxData = exports.getDexPairReserves = exports.IDexType = void 0;
+    exports.executeRouterSwap = exports.getRouterSwapTxData = exports.getDexPairReserves = exports.getSwapProxySelectors = exports.IDexType = void 0;
+    Object.defineProperty(exports, "getSwapProxySelectors", { enumerable: true, get: function () { return routerSwap_1.getSwapProxySelectors; } });
     Object.defineProperty(exports, "IDexType", { enumerable: true, get: function () { return interfaces_3.IDexType; } });
     let moduleDir = components_1.application.currentModuleDir;
     function fullPath(path) {

@@ -1,12 +1,12 @@
 import { BigNumber, TransactionOptions, TransactionReceipt } from '@ijstech/eth-contract';
 import { application } from '@ijstech/components';
-import { getRouterSwap } from './routerSwap';
+import { getRouterSwap, getSwapProxySelectors } from './routerSwap';
 import { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput } from './interfaces';
 import { getDexPair } from './dexPair';
 import { IRpcWallet } from '@ijstech/eth-wallet';
 let moduleDir = application.currentModuleDir;
 
-export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput };
+export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput, getSwapProxySelectors };
 
 function fullPath(path: string): string {
     if (path.indexOf('://') > 0)

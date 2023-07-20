@@ -11506,6 +11506,7 @@ declare module "@scom/scom-dex-list/routerSwap.ts" {
     export abstract class RouterSwap {
         protected router: any;
         constructor(router: any);
+        abstract PermittedProxyFunctions: string[];
         abstract swapExactETHForTokensSupportingFeeOnTransferTokens: IRouterSwapOutput;
         abstract swapExactETHForTokens: IRouterSwapOutput;
         abstract swapExactTokensForETHSupportingFeeOnTransferTokens: IRouterSwapOutput;
@@ -11519,6 +11520,7 @@ declare module "@scom/scom-dex-list/routerSwap.ts" {
     export class NormalRouterSwap extends RouterSwap {
         protected router: any;
         constructor(router: any);
+        PermittedProxyFunctions: string[];
         swapExactETHForTokensSupportingFeeOnTransferTokens: any;
         swapExactETHForTokens: any;
         swapExactTokensForETHSupportingFeeOnTransferTokens: any;
@@ -11532,6 +11534,7 @@ declare module "@scom/scom-dex-list/routerSwap.ts" {
     export class BakerySwapRouterSwap extends NormalRouterSwap {
         protected router: BakeryContracts.BakerySwapRouter;
         constructor(router: BakeryContracts.BakerySwapRouter);
+        PermittedProxyFunctions: (keyof BakeryContracts.BakerySwapRouter)[];
         swapExactETHForTokensSupportingFeeOnTransferTokens: {
             (params: import("@scom/scom-dex-list/contracts/oswap-bakery-swap-contract/contracts/BakerySwapRouter.ts").ISwapExactBNBForTokensSupportingFeeOnTransferTokensParams, options?: number | import("@ijstech/eth-wallet").BigNumber | import("@ijstech/eth-contract").TransactionOptions): Promise<import("@ijstech/eth-contract").TransactionReceipt>;
             call: (params: import("@scom/scom-dex-list/contracts/oswap-bakery-swap-contract/contracts/BakerySwapRouter.ts").ISwapExactBNBForTokensSupportingFeeOnTransferTokensParams, options?: number | import("@ijstech/eth-wallet").BigNumber | import("@ijstech/eth-contract").TransactionOptions) => Promise<void>;
@@ -11566,6 +11569,7 @@ declare module "@scom/scom-dex-list/routerSwap.ts" {
     export class TraderJoeRouterSwap extends NormalRouterSwap {
         protected router: TraderJoeContracts.JoeRouter02;
         constructor(router: TraderJoeContracts.JoeRouter02);
+        PermittedProxyFunctions: (keyof TraderJoeContracts.JoeRouter02)[];
         swapExactETHForTokensSupportingFeeOnTransferTokens: {
             (params: import("@scom/scom-dex-list/contracts/oswap-trader-joe-contract/contracts/JoeRouter02.ts").ISwapExactAVAXForTokensSupportingFeeOnTransferTokensParams, options?: number | import("@ijstech/eth-wallet").BigNumber | import("@ijstech/eth-contract").TransactionOptions): Promise<import("@ijstech/eth-contract").TransactionReceipt>;
             call: (params: import("@scom/scom-dex-list/contracts/oswap-trader-joe-contract/contracts/JoeRouter02.ts").ISwapExactAVAXForTokensSupportingFeeOnTransferTokensParams, options?: number | import("@ijstech/eth-wallet").BigNumber | import("@ijstech/eth-contract").TransactionOptions) => Promise<void>;
@@ -11598,6 +11602,7 @@ declare module "@scom/scom-dex-list/routerSwap.ts" {
         };
     }
     export function getRouterSwap(dexInfo: IDexInfo): RouterSwap;
+    export function getSwapProxySelectors(dexInfo: IDexInfo): string[];
 }
 /// <amd-module name="@scom/scom-dex-list/contracts/oswap-impossible-swap-contract/contracts/ImpossibleERC20.json.ts" />
 declare module "@scom/scom-dex-list/contracts/oswap-impossible-swap-contract/contracts/ImpossibleERC20.json.ts" {
@@ -13379,9 +13384,10 @@ declare module "@scom/scom-dex-list/dexPair.ts" {
 /// <amd-module name="@scom/scom-dex-list" />
 declare module "@scom/scom-dex-list" {
     import { TransactionReceipt } from '@ijstech/eth-contract';
+    import { getSwapProxySelectors } from "@scom/scom-dex-list/routerSwap.ts";
     import { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput } from "@scom/scom-dex-list/interfaces.ts";
     import { IRpcWallet } from '@ijstech/eth-wallet';
-    export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput };
+    export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput, getSwapProxySelectors };
     export function getDexPairReserves(wallet: IRpcWallet, chainId: number, dexCode: string, pairAddress: string, tokenInAddress: string, tokenOutAddress: string): Promise<IGetDexPairReservesOutput>;
     export function getRouterSwapTxData(chainId: number, dexCode: string, options: IExecuteSwapOptions): Promise<string>;
     export function executeRouterSwap(chainId: number, dexCode: string, options: IExecuteSwapOptions): Promise<TransactionReceipt>;
