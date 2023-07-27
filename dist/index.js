@@ -15648,20 +15648,21 @@ define("@scom/scom-dex-list/routerSwap.ts", ["require", "exports", "@scom/scom-d
         return routerSwap;
     }
     exports.getRouterSwap = getRouterSwap;
-    function getSwapProxySelectors(dexInfo) {
-        const wallet = eth_wallet_1.Wallet.getClientInstance();
+    async function getSwapProxySelectors(wallet, dexInfo) {
         let routerSwap;
         let router;
+        if (wallet.chainId != dexInfo.chainId)
+            await wallet.switchNetwork(dexInfo.chainId);
         if (dexInfo.dexType === interfaces_1.IDexType.BakerySwap) {
             router = new index_4.Contracts.BakerySwapRouter(wallet, dexInfo.routerAddress);
             routerSwap = new BakerySwapRouterSwap(router);
         }
         else if (dexInfo.dexType === interfaces_1.IDexType.TraderJoe) {
-            const router = new index_5.Contracts.JoeRouter02(wallet, dexInfo.routerAddress);
+            router = new index_5.Contracts.JoeRouter02(wallet, dexInfo.routerAddress);
             routerSwap = new TraderJoeRouterSwap(router);
         }
         else {
-            const router = new index_3.Contracts.OSWAP_Router(wallet, dexInfo.routerAddress);
+            router = new index_3.Contracts.OSWAP_Router(wallet, dexInfo.routerAddress);
             routerSwap = new NormalRouterSwap(router);
         }
         let selectors = routerSwap.PermittedProxyFunctions

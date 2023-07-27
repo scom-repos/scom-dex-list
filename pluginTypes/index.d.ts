@@ -11502,6 +11502,7 @@ declare module "@scom/scom-dex-list/interfaces.ts" {
 declare module "@scom/scom-dex-list/routerSwap.ts" {
     import { Contracts as BakeryContracts } from "@scom/scom-dex-list/contracts/oswap-bakery-swap-contract/index.ts";
     import { Contracts as TraderJoeContracts } from "@scom/scom-dex-list/contracts/oswap-trader-joe-contract/index.ts";
+    import { IRpcWallet } from '@ijstech/eth-wallet';
     import { IDexInfo, IRouterSwapOutput } from "@scom/scom-dex-list/interfaces.ts";
     export abstract class RouterSwap {
         protected router: any;
@@ -11602,7 +11603,7 @@ declare module "@scom/scom-dex-list/routerSwap.ts" {
         };
     }
     export function getRouterSwap(dexInfo: IDexInfo): RouterSwap;
-    export function getSwapProxySelectors(dexInfo: IDexInfo): string[];
+    export function getSwapProxySelectors(wallet: IRpcWallet, dexInfo: IDexInfo): Promise<string[]>;
 }
 /// <amd-module name="@scom/scom-dex-list/contracts/oswap-impossible-swap-contract/contracts/ImpossibleERC20.json.ts" />
 declare module "@scom/scom-dex-list/contracts/oswap-impossible-swap-contract/contracts/ImpossibleERC20.json.ts" {
