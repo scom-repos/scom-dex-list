@@ -1,0 +1,14 @@
+{
+    "name": "@scom/scom-dex-list",
+    "type": "widget",
+    "version": "0.1.3",
+    "dependencies": [
+        "@ijstech/eth-contract",
+        "@ijstech/components",
+        "@scom/oswap-openswap-contract",
+        "@scom/oswap-bakery-swap-contract",
+        "@scom/oswap-trader-joe-contract",
+        "@ijstech/eth-wallet",
+        "@scom/oswap-impossible-swap-contract"
+    ]
+}

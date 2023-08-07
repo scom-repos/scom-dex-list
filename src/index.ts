@@ -29,13 +29,13 @@ export async function getDexPairReserves(
     let reserveObj: IGetDexPairReservesOutput;
     if (new BigNumber(tokenInAddress.toLowerCase()).lt(tokenOutAddress.toLowerCase())) {
       reserveObj = {
-        reserveA: reserves._reserve0,
-        reserveB: reserves._reserve1
+        reserveA: reserves.reserve0,
+        reserveB: reserves.reserve1
       };
     } else {
       reserveObj = {
-        reserveA: reserves._reserve1,
-        reserveB: reserves._reserve0
+        reserveA: reserves.reserve1,
+        reserveB: reserves.reserve0
       };
     }
     return reserveObj;
@@ -95,6 +95,7 @@ export async function executeRouterSwap(chainId: number, dexCode: string, option
     const dexInfo = getDexList().find(d => d.chainId === chainId && d.dexCode === dexCode);
     if (!dexInfo) return Promise.reject(new Error('Dex not found'));
     let receipt: TransactionReceipt;
+    // await application.loadPackage('@scom/oswap-trader-joe-contract', '*');
     let routerSwap = getRouterSwap(dexInfo);
 
     if (options.exactType === 'exactIn') {

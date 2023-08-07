@@ -1,9 +1,10 @@
-import { Contracts as OswapContracts } from './contracts/oswap-openswap-contract/index';
-import { Contracts as BakeryContracts } from './contracts/oswap-bakery-swap-contract/index';
-import { Contracts as TraderJoeContracts } from './contracts/oswap-trader-joe-contract/index';
+import { Contracts as OswapContracts } from '@scom/oswap-openswap-contract';
+import { Contracts as BakeryContracts } from '@scom/oswap-bakery-swap-contract';
+import { Contracts as TraderJoeContracts } from '@scom/oswap-trader-joe-contract';
 import { IRpcWallet, Wallet } from '@ijstech/eth-wallet';
 import { Contract } from '@ijstech/eth-contract';
 import { IDexInfo, IDexType, IRouterSwapOutput } from './interfaces';
+import { application } from '@ijstech/components';
 
 export abstract class RouterSwap {
     protected router: any;
@@ -59,12 +60,12 @@ export class BakerySwapRouterSwap extends NormalRouterSwap {
         "swapExactTokensForBNB", 
         "swapBNBForExactTokens"
     ];
-    swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactBNBForTokensSupportingFeeOnTransferTokens;
-    swapExactETHForTokens = this.router.swapExactBNBForTokens;
-    swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForBNBSupportingFeeOnTransferTokens;
-    swapExactTokensForETH = this.router.swapExactTokensForBNB;
-    swapETHForExactTokens = this.router.swapBNBForExactTokens;
-    swapTokensForExactETH = this.router.swapTokensForExactBNB;
+    swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactBNBForTokensSupportingFeeOnTransferTokens as any;
+    swapExactETHForTokens = this.router.swapExactBNBForTokens as any;
+    swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForBNBSupportingFeeOnTransferTokens as any;
+    swapExactTokensForETH = this.router.swapExactTokensForBNB as any;
+    swapETHForExactTokens = this.router.swapBNBForExactTokens as any;
+    swapTokensForExactETH = this.router.swapTokensForExactBNB as any;
 }
 
 export class TraderJoeRouterSwap extends NormalRouterSwap {
@@ -80,12 +81,12 @@ export class TraderJoeRouterSwap extends NormalRouterSwap {
         "swapExactTokensForAVAX", 
         "swapAVAXForExactTokens"
     ];
-    swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactAVAXForTokensSupportingFeeOnTransferTokens;
-    swapExactETHForTokens = this.router.swapExactAVAXForTokens;
-    swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForAVAXSupportingFeeOnTransferTokens;
-    swapExactTokensForETH = this.router.swapExactTokensForAVAX;
-    swapETHForExactTokens = this.router.swapAVAXForExactTokens;
-    swapTokensForExactETH = this.router.swapTokensForExactAVAX;
+    swapExactETHForTokensSupportingFeeOnTransferTokens = this.router.swapExactAVAXForTokensSupportingFeeOnTransferTokens as any;
+    swapExactETHForTokens = this.router.swapExactAVAXForTokens as any;
+    swapExactTokensForETHSupportingFeeOnTransferTokens = this.router.swapExactTokensForAVAXSupportingFeeOnTransferTokens as any;
+    swapExactTokensForETH = this.router.swapExactTokensForAVAX as any;
+    swapETHForExactTokens = this.router.swapAVAXForExactTokens as any;
+    swapTokensForExactETH = this.router.swapTokensForExactAVAX as any;
 }
 
 export function getRouterSwap(dexInfo: IDexInfo): RouterSwap {

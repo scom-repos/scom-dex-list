@@ -1,5 +1,5 @@
-import { Contracts as OswapContracts } from './contracts/oswap-openswap-contract/index';
-import { Contracts as IFSwapContracts } from './contracts/oswap-impossible-swap-contract/index';
+import { Contracts as OswapContracts } from '@scom/oswap-openswap-contract';
+import { Contracts as IFSwapContracts } from '@scom/oswap-impossible-swap-contract';
 import { BigNumber, IRpcWallet, Wallet } from '@ijstech/eth-wallet';
 import { IDexInfo, IDexPairReserves, IDexType } from './interfaces';
 import { TransactionOptions } from '@ijstech/eth-contract';

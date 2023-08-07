@@ -37,9 +37,9 @@ export interface IExecuteSwapOptions {
 }
 
 export interface IDexPairReserves {
-    _reserve0: BigNumber;
-    _reserve1: BigNumber;
-    _blockTimestampLast?: BigNumber;
+    reserve0: BigNumber;
+    reserve1: BigNumber;
+    blockTimestampLast?: BigNumber;
 }
 
 export interface IGetDexPairReservesOutput {
