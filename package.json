@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@ijstech/eth-wallet": "^0.1.51",
-    "@scom/oswap-openswap-contract": "^0.1.2",
-    "@scom/oswap-bakery-swap-contract": "https://github.com/scom-repos/oswap-bakery-swap-contract.git",
-    "@scom/oswap-trader-joe-contract": "https://github.com/scom-repos/oswap-trader-joe-contract.git",
-    "@scom/oswap-impossible-swap-contract": "https://github.com/scom-repos/oswap-impossible-swap-contract.git"
+    "@scom/oswap-openswap-contract": "^0.1.4",
+    "@scom/oswap-bakery-swap-contract": "^0.1.2",
+    "@scom/oswap-trader-joe-contract": "^0.1.2",
+    "@scom/oswap-impossible-swap-contract": "^0.1.1"
   },
   "devDependencies": {
     "@types/node": "18.15",
