@@ -28,9 +28,9 @@ export class IFSwapV3Pair extends DexPair {
     getReserves = this.pair.getReserves;
 }
 
-export function getDexPair(wallet: IRpcWallet, dexInfo: IDexInfo, pairAddress: string): DexPair {
+export function getDexPair(wallet: IRpcWallet, dexType: IDexType, pairAddress: string): DexPair {
     let dexPair: DexPair;
-    if (dexInfo.dexType === IDexType.IFSwapV3) {
+    if (dexType === IDexType.IFSwapV3) {
         const router = new IFSwapContracts.ImpossiblePair(wallet, pairAddress);
         dexPair = new IFSwapV3Pair(router);
     }

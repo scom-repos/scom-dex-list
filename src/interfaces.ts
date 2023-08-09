@@ -12,14 +12,18 @@ export enum IDexType {
 }
 
 export interface IDexInfo {
-    chainId: number;
     dexCode: string;
     dexName: string;
     dexType: IDexType;
+    details : IDexDetail[];
+    image: string;
+}
+
+export interface IDexDetail {
+    chainId: number;
     routerAddress: string;
     factoryAddress: string;
     tradeFee: ITradeFeeInfo;
-    image: string;
 }
 
 export interface IRouterSwapOutput {
