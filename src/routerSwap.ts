@@ -2,9 +2,7 @@ import { Contracts as OswapContracts } from '@scom/oswap-openswap-contract';
 import { Contracts as BakeryContracts } from '@scom/oswap-bakery-swap-contract';
 import { Contracts as TraderJoeContracts } from '@scom/oswap-trader-joe-contract';
 import { IRpcWallet, Wallet } from '@ijstech/eth-wallet';
-import { Contract } from '@ijstech/eth-contract';
-import { IDexInfo, IDexType, IRouterSwapOutput } from './interfaces';
-import { application } from '@ijstech/components';
+import { IDexType, IRouterSwapOutput } from './interfaces';
 
 export abstract class RouterSwap {
     protected router: any;
@@ -89,38 +87,38 @@ export class TraderJoeRouterSwap extends NormalRouterSwap {
     swapTokensForExactETH = this.router.swapTokensForExactAVAX as any;
 }
 
-export function getRouterSwap(dexInfo: IDexInfo): RouterSwap {
+export function getRouterSwap(dexType:IDexType, routerAddress:string): RouterSwap {
     const wallet = Wallet.getClientInstance();
     let routerSwap: RouterSwap;
-    if (dexInfo.dexType === IDexType.BakerySwap) {
-        const router = new BakeryContracts.BakerySwapRouter(wallet, dexInfo.routerAddress);
+    if (dexType === IDexType.BakerySwap) {
+        const router = new BakeryContracts.BakerySwapRouter(wallet, routerAddress);
         routerSwap = new BakerySwapRouterSwap(router);
     }
-    else if (dexInfo.dexType === IDexType.TraderJoe) {
-        const router = new TraderJoeContracts.JoeRouter02(wallet, dexInfo.routerAddress);
+    else if (dexType === IDexType.TraderJoe) {
+        const router = new TraderJoeContracts.JoeRouter02(wallet, routerAddress);
         routerSwap = new TraderJoeRouterSwap(router);
     }
     else {
-        const router = new OswapContracts.OSWAP_Router(wallet, dexInfo.routerAddress);
+        const router = new OswapContracts.OSWAP_Router(wallet, routerAddress);
         routerSwap = new NormalRouterSwap(router);     
     }
     return routerSwap;
 }
 
-export async function getSwapProxySelectors(wallet: IRpcWallet, dexInfo: IDexInfo): Promise<string[]> {
+export async function getSwapProxySelectors(wallet: IRpcWallet, dexType: IDexType, chainId: number, routerAddress:string): Promise<string[]> {
     let routerSwap: RouterSwap;
     let router: any;
-    if (wallet.chainId != dexInfo.chainId) await wallet.switchNetwork(dexInfo.chainId)
-    if (dexInfo.dexType === IDexType.BakerySwap) {
-        router = new BakeryContracts.BakerySwapRouter(wallet, dexInfo.routerAddress);
+    if (wallet.chainId != chainId) await wallet.switchNetwork(chainId)
+    if (dexType === IDexType.BakerySwap) {
+        router = new BakeryContracts.BakerySwapRouter(wallet, routerAddress);
         routerSwap = new BakerySwapRouterSwap(router);
     }
-    else if (dexInfo.dexType === IDexType.TraderJoe) {
-        router = new TraderJoeContracts.JoeRouter02(wallet, dexInfo.routerAddress);
+    else if (dexType === IDexType.TraderJoe) {
+        router = new TraderJoeContracts.JoeRouter02(wallet, routerAddress);
         routerSwap = new TraderJoeRouterSwap(router);
     }
     else {
-        router = new OswapContracts.OSWAP_Router(wallet, dexInfo.routerAddress);
+        router = new OswapContracts.OSWAP_Router(wallet, routerAddress);
         routerSwap = new NormalRouterSwap(router);     
     }
     let selectors = routerSwap.PermittedProxyFunctions
