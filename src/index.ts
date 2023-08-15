@@ -1,7 +1,7 @@
-import { BigNumber, TransactionOptions, TransactionReceipt } from '@ijstech/eth-contract';
+import { BigNumber, TransactionReceipt } from '@ijstech/eth-contract';
 import { application } from '@ijstech/components';
 import { getRouterSwap, getSwapProxySelectors } from './routerSwap';
-import { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput } from './interfaces';
+import { IDexInfo, IDexType, IDexDetail, IExecuteSwapOptions, IGetDexPairReservesOutput } from './interfaces';
 import { getDexPair } from './dexPair';
 import { IRpcWallet } from '@ijstech/eth-wallet';
 let moduleDir = application.currentModuleDir;
@@ -21,7 +21,7 @@ export function findDex(dexCode: string) {
 export function findDexDetail(dexCode: string, chainId: number) {
     const dexInfo = findDex(dexCode);
     if (!dexInfo) return {dexInfo:undefined, dexDetail:undefined}
-    const dexDetail = dexInfo.details.find(d => d.chainId === chainId);
+    const dexDetail: IDexDetail = dexInfo.details.find(d => d.chainId === chainId);
     return {dexInfo, dexDetail}
 }
 

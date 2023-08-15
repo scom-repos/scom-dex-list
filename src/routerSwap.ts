@@ -2,9 +2,7 @@ import { Contracts as OswapContracts } from '@scom/oswap-openswap-contract';
 import { Contracts as BakeryContracts } from '@scom/oswap-bakery-swap-contract';
 import { Contracts as TraderJoeContracts } from '@scom/oswap-trader-joe-contract';
 import { IRpcWallet, Wallet } from '@ijstech/eth-wallet';
-import { Contract } from '@ijstech/eth-contract';
-import { IDexInfo, IDexType, IRouterSwapOutput } from './interfaces';
-import { application } from '@ijstech/components';
+import { IDexType, IRouterSwapOutput } from './interfaces';
 
 export abstract class RouterSwap {
     protected router: any;

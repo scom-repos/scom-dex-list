@@ -140,13 +140,13 @@ declare module "@scom/scom-dex-list/dexPair.ts" {
 declare module "@scom/scom-dex-list" {
     import { TransactionReceipt } from '@ijstech/eth-contract';
     import { getSwapProxySelectors } from "@scom/scom-dex-list/routerSwap.ts";
-    import { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput } from "@scom/scom-dex-list/interfaces.ts";
+    import { IDexInfo, IDexType, IDexDetail, IExecuteSwapOptions, IGetDexPairReservesOutput } from "@scom/scom-dex-list/interfaces.ts";
     import { IRpcWallet } from '@ijstech/eth-wallet';
     export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput, getSwapProxySelectors };
     export function findDex(dexCode: string): IDexInfo;
     export function findDexDetail(dexCode: string, chainId: number): {
         dexInfo: IDexInfo;
-        dexDetail: import("@scom/scom-dex-list/interfaces.ts").IDexDetail;
+        dexDetail: IDexDetail;
     };
     export function getDexPairReserves(wallet: IRpcWallet, chainId: number, dexCode: string, pairAddress: string, tokenInAddress: string, tokenOutAddress: string): Promise<IGetDexPairReservesOutput>;
     export function getRouterSwapTxData(chainId: number, dexCode: string, options: IExecuteSwapOptions): Promise<string>;
