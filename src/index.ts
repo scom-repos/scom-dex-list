@@ -239,6 +239,15 @@ export default function getDexList(): IDexInfo[] {
                         base: '10000'
                     },
                 },
+                {   
+                    chainId: 324,
+                    routerAddress: '0x5aEaF2883FBf30f3D62471154eDa3C0c1b05942d',
+                    factoryAddress: '0xd03D8D566183F0086d8D09A84E1e30b58Dd5619d',
+                    tradeFee: {
+                        fee: '25',
+                        base: '10000'
+                    },
+                },
             ],
             image: fullPath('/img/pancakeswap.svg')
         },     
