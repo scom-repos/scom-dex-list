@@ -6,7 +6,7 @@ import { getDexPair } from './dexPair';
 import { IRpcWallet } from '@ijstech/eth-wallet';
 let moduleDir = application.currentModuleDir;
 
-export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput, getSwapProxySelectors };
+export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput, getSwapProxySelectors, IDexDetail };
 
 function fullPath(path: string): string {
     if (path.indexOf('://') > 0)

@@ -142,7 +142,7 @@ declare module "@scom/scom-dex-list" {
     import { getSwapProxySelectors } from "@scom/scom-dex-list/routerSwap.ts";
     import { IDexInfo, IDexType, IDexDetail, IExecuteSwapOptions, IGetDexPairReservesOutput } from "@scom/scom-dex-list/interfaces.ts";
     import { IRpcWallet } from '@ijstech/eth-wallet';
-    export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput, getSwapProxySelectors };
+    export { IDexInfo, IDexType, IExecuteSwapOptions, IGetDexPairReservesOutput, getSwapProxySelectors, IDexDetail };
     export function findDex(dexCode: string): IDexInfo;
     export function findDexDetail(dexCode: string, chainId: number): {
         dexInfo: IDexInfo;
