@@ -129,7 +129,7 @@ define("@scom/scom-dex-list/routerSwap.ts", ["require", "exports", "@scom/oswap-
 define("@scom/scom-dex-list/dexPair.ts", ["require", "exports", "@scom/oswap-openswap-contract", "@scom/oswap-impossible-swap-contract", "@scom/scom-dex-list/interfaces.ts"], function (require, exports, oswap_openswap_contract_2, oswap_impossible_swap_contract_1, interfaces_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getDexPair = exports.IFSwapV3Pair = exports.NormalDexPair = exports.DexPair = void 0;
+    exports.parseSwapEvents = exports.getDexPair = exports.IFSwapV3Pair = exports.NormalDexPair = exports.DexPair = void 0;
     class DexPair {
         constructor(pair) {
             this.pair = pair;
@@ -153,23 +153,34 @@ define("@scom/scom-dex-list/dexPair.ts", ["require", "exports", "@scom/oswap-ope
     function getDexPair(wallet, dexType, pairAddress) {
         let dexPair;
         if (dexType === interfaces_2.IDexType.IFSwapV3) {
-            const router = new oswap_impossible_swap_contract_1.Contracts.ImpossiblePair(wallet, pairAddress);
-            dexPair = new IFSwapV3Pair(router);
+            const pair = new oswap_impossible_swap_contract_1.Contracts.ImpossiblePair(wallet, pairAddress);
+            dexPair = new IFSwapV3Pair(pair);
         }
         else {
-            const router = new oswap_openswap_contract_2.Contracts.OSWAP_Pair(wallet, pairAddress);
-            dexPair = new NormalDexPair(router);
+            const pair = new oswap_openswap_contract_2.Contracts.OSWAP_Pair(wallet, pairAddress);
+            dexPair = new NormalDexPair(pair);
         }
         return dexPair;
     }
     exports.getDexPair = getDexPair;
+    function parseSwapEvents(wallet, receipt, pairAddresses) {
+        let events = [];
+        for (let pairAddress of pairAddresses) {
+            let pair = new oswap_openswap_contract_2.Contracts.OSWAP_Pair(wallet, pairAddress);
+            let event = pair.parseSwapEvent(receipt)[0];
+            events.push(event);
+        }
+        return events;
+    }
+    exports.parseSwapEvents = parseSwapEvents;
 });
 define("@scom/scom-dex-list", ["require", "exports", "@ijstech/eth-contract", "@ijstech/components", "@scom/scom-dex-list/routerSwap.ts", "@scom/scom-dex-list/interfaces.ts", "@scom/scom-dex-list/dexPair.ts"], function (require, exports, eth_contract_1, components_1, routerSwap_1, interfaces_3, dexPair_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.executeRouterSwap = exports.getRouterSwapTxData = exports.getDexPairReserves = exports.findDexDetail = exports.findDex = exports.getSwapProxySelectors = exports.IDexType = void 0;
+    exports.executeRouterSwap = exports.getRouterSwapTxData = exports.getDexPairReserves = exports.findDexDetail = exports.findDex = exports.parseSwapEvents = exports.getSwapProxySelectors = exports.IDexType = void 0;
     Object.defineProperty(exports, "getSwapProxySelectors", { enumerable: true, get: function () { return routerSwap_1.getSwapProxySelectors; } });
     Object.defineProperty(exports, "IDexType", { enumerable: true, get: function () { return interfaces_3.IDexType; } });
+    Object.defineProperty(exports, "parseSwapEvents", { enumerable: true, get: function () { return dexPair_1.parseSwapEvents; } });
     let moduleDir = components_1.application.currentModuleDir;
     function fullPath(path) {
         if (path.indexOf('://') > 0)
