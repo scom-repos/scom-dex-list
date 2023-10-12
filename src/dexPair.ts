@@ -28,17 +28,26 @@ export class IFSwapV3Pair extends DexPair {
     getReserves = this.pair.getReserves;
 }
 
-export function getDexPair(wallet: IRpcWallet, dexType: IDexType, pairAddress: string): DexPair {
+export interface IGetDexPairOutput {
+    dexPair: DexPair;
+    contract: any;
+}
+
+export function getDexPair(wallet: IRpcWallet, dexType: IDexType, pairAddress: string): IGetDexPairOutput {
     let dexPair: DexPair;
+    let pairContract: any;
     if (dexType === IDexType.IFSwapV3) {
-        const pair = new IFSwapContracts.ImpossiblePair(wallet, pairAddress);
-        dexPair = new IFSwapV3Pair(pair);
+        pairContract = new IFSwapContracts.ImpossiblePair(wallet, pairAddress);
+        dexPair = new IFSwapV3Pair(pairContract);
     }
     else {
-        const pair = new OswapContracts.OSWAP_Pair(wallet, pairAddress);
-        dexPair = new NormalDexPair(pair);
+        pairContract = new OswapContracts.OSWAP_Pair(wallet, pairAddress);
+        dexPair = new NormalDexPair(pairContract);
     }
-    return dexPair;
+    return {
+        dexPair: dexPair,
+        contract: pairContract
+    };
 }
 
 export function parseSwapEvents(wallet: IRpcWallet, receipt: TransactionReceipt, pairAddresses: string[]) {
