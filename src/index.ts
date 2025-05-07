@@ -3,7 +3,7 @@ import { BigNumber, TransactionReceipt } from '@ijstech/eth-contract';
 import { getRouterSwap, getSwapProxySelectors } from './routerSwap';
 import { IDexInfo, IDexType, IDexDetail, IExecuteSwapOptions, IGetDexPairReservesOutput, ISwapEvent } from './interfaces';
 import { getDexPair, parseSwapEvents } from './dexPair';
-import { IRpcWallet, RpcWallet } from '@ijstech/eth-wallet';
+import { IRpcWallet, IWallet, RpcWallet } from '@ijstech/eth-wallet';
 
 let moduleDir = '';
 if (typeof window !== 'undefined') {
@@ -40,6 +40,33 @@ export async function getDexPairReserves(
     const dexInfo = findDex(dexCode);
     if (!dexInfo) return Promise.reject(new Error('Dex not found'));
     const wallet = RpcWallet.getRpcWallet(chainId);
+    let dexPairObject = getDexPair(wallet, dexInfo.dexType, pairAddress);
+    let dexPair = dexPairObject.dexPair;
+    let reserves = await dexPair.getReserves();
+    let reserveObj: IGetDexPairReservesOutput;
+    if (new BigNumber(tokenInAddress.toLowerCase()).lt(tokenOutAddress.toLowerCase())) {
+      reserveObj = {
+        reserveA: reserves.reserve0,
+        reserveB: reserves.reserve1
+      };
+    } else {
+      reserveObj = {
+        reserveA: reserves.reserve1,
+        reserveB: reserves.reserve0
+      };
+    }
+    return reserveObj;
+}
+
+export async function getWalletDexPairReserves(
+    wallet: IWallet, 
+    dexCode: string, 
+    pairAddress: string, 
+    tokenInAddress: string, 
+    tokenOutAddress: string
+) {
+    const dexInfo = findDex(dexCode);
+    if (!dexInfo) return Promise.reject(new Error('Dex not found'));
     let dexPairObject = getDexPair(wallet, dexInfo.dexType, pairAddress);
     let dexPair = dexPairObject.dexPair;
     let reserves = await dexPair.getReserves();

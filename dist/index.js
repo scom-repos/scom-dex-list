@@ -180,7 +180,7 @@ define("@scom/scom-dex-list/dexPair.ts", ["require", "exports", "@scom/oswap-ope
 define("@scom/scom-dex-list", ["require", "exports", "@ijstech/eth-contract", "@scom/scom-dex-list/routerSwap.ts", "@scom/scom-dex-list/interfaces.ts", "@scom/scom-dex-list/dexPair.ts", "@ijstech/eth-wallet"], function (require, exports, eth_contract_1, routerSwap_1, interfaces_3, dexPair_1, eth_wallet_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.executeRouterSwap = exports.getRouterSwapTxData = exports.getDexPairReserves = exports.findDexDetail = exports.findDex = exports.parseSwapEvents = exports.getSwapProxySelectors = exports.IDexType = void 0;
+    exports.executeRouterSwap = exports.getRouterSwapTxData = exports.getWalletDexPairReserves = exports.getDexPairReserves = exports.findDexDetail = exports.findDex = exports.parseSwapEvents = exports.getSwapProxySelectors = exports.IDexType = void 0;
     Object.defineProperty(exports, "getSwapProxySelectors", { enumerable: true, get: function () { return routerSwap_1.getSwapProxySelectors; } });
     Object.defineProperty(exports, "IDexType", { enumerable: true, get: function () { return interfaces_3.IDexType; } });
     Object.defineProperty(exports, "parseSwapEvents", { enumerable: true, get: function () { return dexPair_1.parseSwapEvents; } });
@@ -230,6 +230,29 @@ define("@scom/scom-dex-list", ["require", "exports", "@ijstech/eth-contract", "@
         return reserveObj;
     }
     exports.getDexPairReserves = getDexPairReserves;
+    async function getWalletDexPairReserves(wallet, dexCode, pairAddress, tokenInAddress, tokenOutAddress) {
+        const dexInfo = findDex(dexCode);
+        if (!dexInfo)
+            return Promise.reject(new Error('Dex not found'));
+        let dexPairObject = (0, dexPair_1.getDexPair)(wallet, dexInfo.dexType, pairAddress);
+        let dexPair = dexPairObject.dexPair;
+        let reserves = await dexPair.getReserves();
+        let reserveObj;
+        if (new eth_contract_1.BigNumber(tokenInAddress.toLowerCase()).lt(tokenOutAddress.toLowerCase())) {
+            reserveObj = {
+                reserveA: reserves.reserve0,
+                reserveB: reserves.reserve1
+            };
+        }
+        else {
+            reserveObj = {
+                reserveA: reserves.reserve1,
+                reserveB: reserves.reserve0
+            };
+        }
+        return reserveObj;
+    }
+    exports.getWalletDexPairReserves = getWalletDexPairReserves;
     async function getRouterSwapTxData(chainId, dexCode, options) {
         const { dexInfo, dexDetail } = findDexDetail(dexCode, chainId);
         if (!dexInfo || !dexDetail)

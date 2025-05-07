@@ -1,6 +1,6 @@
 import { Contracts as OswapContracts } from '@scom/oswap-openswap-contract';
 import { Contracts as IFSwapContracts } from '@scom/oswap-impossible-swap-contract';
-import { BigNumber, IRpcWallet, TransactionReceipt } from '@ijstech/eth-wallet';
+import { BigNumber, IRpcWallet, IWallet, TransactionReceipt } from '@ijstech/eth-wallet';
 import { IDexPairReserves, IDexType, ISwapEvent } from './interfaces';
 import { TransactionOptions } from '@ijstech/eth-contract';
 
@@ -33,7 +33,7 @@ export interface IGetDexPairOutput {
     contract: any;
 }
 
-export function getDexPair(wallet: IRpcWallet, dexType: IDexType, pairAddress: string): IGetDexPairOutput {
+export function getDexPair(wallet: IWallet, dexType: IDexType, pairAddress: string): IGetDexPairOutput {
     let dexPair: DexPair;
     let pairContract: any;
     if (dexType === IDexType.IFSwapV3) {
