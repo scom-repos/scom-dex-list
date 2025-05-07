@@ -1,29 +1,29 @@
 {
-  "name": "@scom/scom-dex-list",
-  "version": "0.1.7",
-  "main": "lib/index.js",
-  "plugin": "dist",
-  "pluginTypes": "pluginTypes/index.d.ts",
-  "types": "types/index.d.ts",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "dependencies": {
-    "@ijstech/eth-wallet": "^0.1.51",
-    "@scom/oswap-openswap-contract": "^0.1.4",
-    "@scom/oswap-bakery-swap-contract": "^0.1.2",
-    "@scom/oswap-trader-joe-contract": "^0.1.2",
-    "@scom/oswap-impossible-swap-contract": "^0.1.1"
-  },
-  "devDependencies": {
-    "@types/node": "18.15",
-    "ts-node": "10.1.0",
-    "typescript": "5.0.4",
-    "@ijstech/eth-contract": "^0.1.5",
-    "@ijstech/components": "^0.1.29",
-    "@ijstech/compiler": "^0.1.22"
-  },
-  "scripts": {
-    "build": "rm -rf dist && rm -rf lib && mkdir dist && bash ./scripts/copy.bash && npx @ijstech/compiler"
-  }
+    "name": "@scom/scom-dex-list",
+    "version": "0.1.8",
+    "main": "lib/index.js",
+    "plugin": "dist",
+    "pluginTypes": "pluginTypes/index.d.ts",
+    "types": "types/index.d.ts",
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "dependencies": {
+        "@ijstech/eth-wallet": "^0.1.51",
+        "@scom/oswap-openswap-contract": "^0.1.4",
+        "@scom/oswap-bakery-swap-contract": "^0.1.2",
+        "@scom/oswap-trader-joe-contract": "^0.1.2",
+        "@scom/oswap-impossible-swap-contract": "^0.1.1"
+    },
+    "devDependencies": {
+        "@types/node": "18.15",
+        "ts-node": "10.1.0",
+        "typescript": "5.0.4",
+        "@ijstech/eth-contract": "^0.1.5",
+        "@ijstech/components": "^0.1.29",
+        "@ijstech/compiler": "^0.1.22"
+    },
+    "scripts": {
+        "build": "rm -rf dist && rm -rf lib && mkdir dist && bash ./scripts/copy.bash && npx @ijstech/compiler"
+    }
 }
