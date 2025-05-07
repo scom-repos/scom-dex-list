@@ -177,14 +177,18 @@ define("@scom/scom-dex-list/dexPair.ts", ["require", "exports", "@scom/oswap-ope
     }
     exports.parseSwapEvents = parseSwapEvents;
 });
-define("@scom/scom-dex-list", ["require", "exports", "@ijstech/eth-contract", "@ijstech/components", "@scom/scom-dex-list/routerSwap.ts", "@scom/scom-dex-list/interfaces.ts", "@scom/scom-dex-list/dexPair.ts", "@ijstech/eth-wallet"], function (require, exports, eth_contract_1, components_1, routerSwap_1, interfaces_3, dexPair_1, eth_wallet_2) {
+define("@scom/scom-dex-list", ["require", "exports", "@ijstech/eth-contract", "@scom/scom-dex-list/routerSwap.ts", "@scom/scom-dex-list/interfaces.ts", "@scom/scom-dex-list/dexPair.ts", "@ijstech/eth-wallet"], function (require, exports, eth_contract_1, routerSwap_1, interfaces_3, dexPair_1, eth_wallet_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.executeRouterSwap = exports.getRouterSwapTxData = exports.getDexPairReserves = exports.findDexDetail = exports.findDex = exports.parseSwapEvents = exports.getSwapProxySelectors = exports.IDexType = void 0;
     Object.defineProperty(exports, "getSwapProxySelectors", { enumerable: true, get: function () { return routerSwap_1.getSwapProxySelectors; } });
     Object.defineProperty(exports, "IDexType", { enumerable: true, get: function () { return interfaces_3.IDexType; } });
     Object.defineProperty(exports, "parseSwapEvents", { enumerable: true, get: function () { return dexPair_1.parseSwapEvents; } });
-    let moduleDir = components_1.application.currentModuleDir;
+    let moduleDir = '';
+    if (typeof window !== 'undefined') {
+        const application = window['application'];
+        moduleDir = application.currentModuleDir;
+    }
     function fullPath(path) {
         if (path.indexOf('://') > 0)
             return path;
